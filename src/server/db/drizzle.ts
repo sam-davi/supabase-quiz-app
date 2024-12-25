@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { PgDatabase } from "drizzle-orm/pg-core";
+import type { PgDatabase } from "drizzle-orm/pg-core";
 
 type SupabaseToken = {
   iss?: string;

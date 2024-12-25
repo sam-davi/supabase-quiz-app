@@ -1,5 +1,5 @@
 import postgres from "postgres";
-import { DrizzleConfig } from "drizzle-orm";
+import type { DrizzleConfig } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 
 import { createClient } from "@/utils/supabase/server";
