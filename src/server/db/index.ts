@@ -1,18 +1,28 @@
-import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import { DrizzleConfig } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/postgres-js";
 
-import { env } from "@/env";
+import { createClient } from "@/utils/supabase/server";
+
+import { createDrizzle } from "./drizzle";
 import * as schema from "./schema";
+import { decode } from "./jwt";
 
-/**
- * Cache the database connection in development. This avoids creating a new connection on every HMR
- * update.
- */
-const globalForDb = globalThis as unknown as {
-  conn: postgres.Sql | undefined;
-};
+const config = {
+  schema,
+} satisfies DrizzleConfig<typeof schema>;
 
-const conn = globalForDb.conn ?? postgres(env.DATABASE_URL);
-if (env.NODE_ENV !== "production") globalForDb.conn = conn;
+// ByPass RLS
+const admin = drizzle(postgres(process.env.ADMIN_DATABASE_URL!, { prepare: false }), config);
 
-export const db = drizzle(conn, { schema });
+// Protected by RLS
+const client = drizzle(postgres(process.env.DATABASE_URL!, { prepare: false }), config);
+
+// https://github.com/orgs/supabase/discussions/23224
+// Should be secure because we use the access token that is signed, and not the data read directly from the storage
+export async function createDrizzleSupabaseClient() {
+  const {
+    data: { session },
+  } = await (await createClient()).auth.getSession();
+  return createDrizzle(decode(session?.access_token ?? ""), { admin, client });
+}

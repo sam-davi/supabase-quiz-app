@@ -16,7 +16,7 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `supabase-quiz-app_${name}`);
+export const createTable = pgTableCreator((name) => `quiz_${name}`);
 
 export const posts = createTable(
   "post",
