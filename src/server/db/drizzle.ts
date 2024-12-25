@@ -12,6 +12,7 @@ type SupabaseToken = {
   role?: string;
 };
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function createDrizzle<
   Database extends PgDatabase<any, any, any>,
   Token extends SupabaseToken = SupabaseToken
@@ -48,3 +49,4 @@ export function createDrizzle<
     }) as typeof client.transaction,
   };
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
