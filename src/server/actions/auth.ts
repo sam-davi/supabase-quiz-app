@@ -92,15 +92,7 @@ export const getProfileAction = async () => {
     });
   });
 
-  if (!profile) {
-    return encodedRedirect("error", "/quiz", "Failed to get profile");
-  }
-
-  const { slug } = profile;
-
-  if (!slug) {
-    return encodedRedirect("error", "/quiz", "Failed to get profile");
-  }
+  const slug = profile?.slug ?? null;
 
   return { slug };
 };

@@ -9,6 +9,10 @@ export default async function Page({
   const { member } = await params;
   const { slug } = await getProfileAction();
 
+  if (!slug) {
+    return redirect("/quiz");
+  }
+
   if (member !== slug) {
     return redirect(`/quiz/${slug}`);
   }
