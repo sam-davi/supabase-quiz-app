@@ -1,36 +1,60 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
-
 import { sql } from "drizzle-orm";
-import {
-  index,
-  integer,
-  pgTableCreator,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { index, pgTable, serial, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { authUsers } from "drizzle-orm/supabase";
 
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-export const createTable = pgTableCreator((name) => `quiz_${name}`);
-
-export const posts = createTable(
-  "post",
+export const teams = pgTable(
+  "teams",
   {
-    id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-    name: varchar("name", { length: 256 }),
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    slug: text("slug").notNull(),
+    createdBy: uuid("created_by").notNull().default(sql`auth.uid()`).references(() => authUsers.id),
     createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
+      .notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
       () => new Date()
     ),
   },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
+  (table) => [
+    index("teams_name_idx").on(table.name),
+    uniqueIndex("teams_slug_idx").on(table.slug),
+  ]
+);
+
+export const profiles = pgTable(
+  "profiles",
+  {
+    id: serial("id").primaryKey(),
+    userId: uuid("user_id").notNull().unique().default(sql`auth.uid()`).references(() => authUsers.id),
+    name: text("name").notNull(),
+    slug: text("slug").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+      () => new Date()
+    ),
+  },
+  (table) => [
+    index("profiles_name_idx").on(table.name),
+    uniqueIndex("profiles_slug_idx").on(table.slug),
+  ]
+);
+
+export const members = pgTable(
+  "members",
+  {
+    id: serial("id").primaryKey(),
+    team: text("team").notNull().references(() => teams.slug),
+    member: text("member").notNull().references(() => profiles.slug),
+    role: text("role").notNull().default("member"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+      () => new Date()
+    ),
+  },
+  (table) => [
+    index("members_member_idx").on(table.member),
+    uniqueIndex("members_team_member_idx").on(table.team, table.member)
+  ]
 );
