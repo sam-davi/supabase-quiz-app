@@ -16,32 +16,29 @@ export async function updateSession(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
+            request.cookies.set(name, value),
           );
           supabaseResponse = NextResponse.next({
             request,
           });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            supabaseResponse.cookies.set(name, value, options),
           );
         },
       },
-    }
+    },
   );
 
-  if (
-    request.nextUrl.pathname.startsWith("/protected") &&
-    !(await supabase.auth.getUser()).data.user
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
-    const url = request.nextUrl.clone();
-    url.pathname = "/";
-    return NextResponse.redirect(url);
+  const user = await supabase.auth.getUser();
+
+  // protected routes
+  if (request.nextUrl.pathname.startsWith("/quiz") && user.error) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
-  // This will refresh session if expired - required for Server Components
-  // https://supabase.com/docs/guides/auth/server-side/nextjs
-  await supabase.auth.getUser();
+  if (request.nextUrl.pathname === "/" && !user.error) {
+    return NextResponse.redirect(new URL("/quiz", request.url));
+  }
 
   return supabaseResponse;
 }
