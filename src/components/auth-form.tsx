@@ -1,4 +1,5 @@
-import { cn } from "@/lib/utils";
+import { FormMessage, Message } from "@/components/form-message";
+import { SubmitButton } from "@/components/submit-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,23 +10,35 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signInAction } from "@/server/actions/auth";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+type ServerAction = (formData: FormData) => Promise<never>;
+
+type AuthFormProps = {
+  title: string;
+  description: string;
+  message: Message;
+  footer: React.ReactNode;
+  formType: "Sign in" | "Sign up";
+  formAction: ServerAction;
+};
+
+export function AuthForm({
+  title,
+  description,
+  message,
+  footer,
+  formType,
+  formAction,
+}: AuthFormProps) {
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>
-            Login with your Apple or Google account
-          </CardDescription>
+          <CardTitle className="text-xl">{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={signInAction}>
+          <form action={formAction}>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
                 <Button variant="outline" className="w-full">
@@ -35,7 +48,7 @@ export function LoginForm({
                       fill="currentColor"
                     />
                   </svg>
-                  Login with Apple
+                  {formType} with Apple
                 </Button>
                 <Button variant="outline" className="w-full">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -44,12 +57,12 @@ export function LoginForm({
                       fill="currentColor"
                     />
                   </svg>
-                  Login with Google
+                  {formType} with Google
                 </Button>
               </div>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">
-                  Or continue with
+                  Or {formType.toLowerCase()} with
                 </span>
               </div>
               <div className="grid gap-6">
@@ -64,36 +77,25 @@ export function LoginForm({
                   />
                 </div>
                 <div className="grid gap-2">
-                  <div className="flex items-center">
-                    <Label htmlFor="password">Password</Label>
-                    <a
-                      href="#"
-                      className="ml-auto text-sm underline-offset-4 hover:underline"
-                    >
-                      Forgot your password?
-                    </a>
-                  </div>
+                  <Label htmlFor="password">Password</Label>
                   <Input
                     id="password"
                     name="password"
                     type="password"
+                    minLength={6}
                     required
                   />
                 </div>
-                <Button
+                <SubmitButton
                   type="submit"
                   className="w-full"
-                  formAction={signInAction}
+                  formAction={formAction}
                 >
-                  Login
-                </Button>
+                  {formType}
+                </SubmitButton>
+                <FormMessage message={message} />
               </div>
-              <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <a href="#" className="underline underline-offset-4">
-                  Sign up
-                </a>
-              </div>
+              {footer}
             </div>
           </form>
         </CardContent>
@@ -102,6 +104,6 @@ export function LoginForm({
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>.
       </div>
-    </div>
+    </>
   );
 }
