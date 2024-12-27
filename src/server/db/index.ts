@@ -13,10 +13,16 @@ const config = {
 } satisfies DrizzleConfig<typeof schema>;
 
 // ByPass RLS
-const admin = drizzle(postgres(process.env.ADMIN_DATABASE_URL!, { prepare: false }), config);
+const admin = drizzle(
+  postgres(process.env.ADMIN_DATABASE_URL!, { prepare: false }),
+  config,
+);
 
 // Protected by RLS
-const client = drizzle(postgres(process.env.DATABASE_URL!, { prepare: false }), config);
+const client = drizzle(
+  postgres(process.env.DATABASE_URL!, { prepare: false }),
+  config,
+);
 
 // https://github.com/orgs/supabase/discussions/23224
 // Should be secure because we use the access token that is signed, and not the data read directly from the storage

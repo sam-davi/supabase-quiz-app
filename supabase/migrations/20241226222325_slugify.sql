@@ -4,7 +4,7 @@ CREATE OR REPLACE FUNCTION slugify("value" TEXT)
 RETURNS TEXT AS $$
 -- removes accents (diacritic signs) from a given string --
   WITH "unaccented" AS (
-    SELECT unaccent("value") AS "value"
+    SELECT extensions.unaccent("value") AS "value"
   ),
 -- lowercases the string
   "lowercase" AS (
