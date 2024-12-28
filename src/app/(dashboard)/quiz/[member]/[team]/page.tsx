@@ -13,8 +13,38 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { getProfileAction } from "@/server/actions/profiles";
+import { getTeamsAction } from "@/server/actions/teams";
+import { redirect } from "next/navigation";
 
-export default function Page() {
+async function checkUserCanViewDashboard(member: string, team: string) {
+  const { slug } = await getProfileAction();
+
+  if (!slug) {
+    return redirect("/quiz");
+  }
+
+  if (member !== slug) {
+    return redirect(`/quiz/${slug}`);
+  }
+
+  const teams = await getTeamsAction();
+
+  if (!teams.find((t) => t.slug === team)) {
+    return redirect(`/quiz/${member}`);
+  }
+
+  return teams;
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ member: string; team: string }>;
+}) {
+  const { member, team } = await params;
+  await checkUserCanViewDashboard(member, team);
+
   return (
     <SidebarProvider>
       <AppSidebar />

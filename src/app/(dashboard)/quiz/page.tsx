@@ -1,5 +1,5 @@
 import { NewProfileForm } from "@/components/new-profile-form";
-import { getProfileAction } from "@/server/actions/auth";
+import { getProfileAction } from "@/server/actions/profiles";
 import { redirect } from "next/navigation";
 
 export default async function Page() {

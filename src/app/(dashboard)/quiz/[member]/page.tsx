@@ -1,12 +1,9 @@
-import { getProfileAction } from "@/server/actions/auth";
+import { NewTeamForm } from "@/components/new-team-form";
+import { getProfileAction } from "@/server/actions/profiles";
+import { getTeamAction } from "@/server/actions/teams";
 import { redirect } from "next/navigation";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ member: string }>;
-}) {
-  const { member } = await params;
+async function checkUserCanCreateTeam(member: string) {
   const { slug } = await getProfileAction();
 
   if (!slug) {
@@ -17,13 +14,24 @@ export default async function Page({
     return redirect(`/quiz/${slug}`);
   }
 
+  const team = (await getTeamAction()).slug;
+
+  if (team) {
+    return redirect(`/quiz/${member}/${team}`);
+  }
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ member: string }>;
+}) {
+  const { member } = await params;
+  await checkUserCanCreateTeam(member);
+
   return (
     <div className="flex h-screen flex-col items-center justify-center">
-      <h1 className="mb-4 text-4xl font-bold">Member</h1>
-      <p className="text-lg">This is the member page.</p>
-      <p className="text-sm">
-        The member will see this page if they are not a part of a team.
-      </p>
+      <NewTeamForm />
     </div>
   );
 }

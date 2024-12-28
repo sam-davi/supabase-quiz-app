@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   index,
   pgTable,
@@ -33,6 +33,10 @@ export const teams = pgTable(
   ],
 );
 
+export const teamsRelations = relations(teams, ({ many }) => ({
+  members: many(members),
+}));
+
 export const profiles = pgTable(
   "profiles",
   {
@@ -57,6 +61,10 @@ export const profiles = pgTable(
   ],
 );
 
+export const profilesRelations = relations(profiles, ({ many }) => ({
+  members: many(members),
+}));
+
 export const members = pgTable(
   "members",
   {
@@ -80,3 +88,14 @@ export const members = pgTable(
     uniqueIndex("members_team_member_idx").on(table.team, table.member),
   ],
 );
+
+export const membersRelations = relations(members, ({ one }) => ({
+  team: one(teams, {
+    fields: [members.team],
+    references: [teams.slug],
+  }),
+  member: one(profiles, {
+    fields: [members.member],
+    references: [profiles.slug],
+  }),
+}));
