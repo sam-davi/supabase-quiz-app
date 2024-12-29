@@ -4,9 +4,6 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { createDrizzleSupabaseClient } from "../db";
-import { profiles } from "../db/schema";
-import { authUid } from "drizzle-orm/supabase";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email") as string;
@@ -36,7 +33,7 @@ export const signUpAction = async (formData: FormData) => {
   } else {
     return encodedRedirect(
       "success",
-      "/sign-up",
+      "/sign-in",
       "Thanks for signing up! Please check your email for a verification link.",
     );
   }

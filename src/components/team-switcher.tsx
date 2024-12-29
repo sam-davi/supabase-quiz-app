@@ -18,22 +18,33 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { redirect, useParams } from "next/navigation";
 
 export function TeamSwitcher({
   teams,
 }: {
   teams: {
+    slug: string | null;
     name: string;
-    logo: React.ElementType;
-    plan: string;
   }[];
 }) {
   const { isMobile } = useSidebar();
-  const [activeTeam, setActiveTeam] = React.useState(teams[0]);
+  const { member, team }: { member: string; team: string } = useParams();
+  const [activeTeam, setActiveTeam] = React.useState(
+    teams.find((t) => t.slug === team),
+  );
 
   if (!activeTeam) {
     return null;
   }
+
+  const handleSelectTeam = (team: typeof activeTeam) => {
+    if (team.slug === activeTeam.slug) {
+      return;
+    }
+    setActiveTeam(team);
+    redirect(`/quiz/${member}/${team.slug}`);
+  };
 
   return (
     <SidebarMenu>
@@ -45,13 +56,13 @@ export function TeamSwitcher({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <activeTeam.logo className="size-4" />
+                {/* <activeTeam.logo className="size-4" /> */}
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
                   {activeTeam.name}
                 </span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
+                <span className="truncate text-xs">{activeTeam.slug}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -67,12 +78,12 @@ export function TeamSwitcher({
             </DropdownMenuLabel>
             {teams.map((team, index) => (
               <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveTeam(team)}
+                key={team.slug}
+                onClick={() => handleSelectTeam(team)}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
-                  <team.logo className="size-4 shrink-0" />
+                  {/* <team.logo className="size-4 shrink-0" /> */}
                 </div>
                 {team.name}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>

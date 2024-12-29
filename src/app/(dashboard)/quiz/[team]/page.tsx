@@ -17,21 +17,17 @@ import { getProfileAction } from "@/server/actions/profiles";
 import { getTeamsAction } from "@/server/actions/teams";
 import { redirect } from "next/navigation";
 
-async function checkUserCanViewDashboard(member: string, team: string) {
+async function checkUserCanViewDashboard(team: string) {
   const { slug } = await getProfileAction();
 
   if (!slug) {
     return redirect("/quiz");
   }
 
-  if (member !== slug) {
-    return redirect(`/quiz/${slug}`);
-  }
-
   const teams = await getTeamsAction();
 
   if (!teams.find((t) => t.slug === team)) {
-    return redirect(`/quiz/${member}`);
+    return redirect("/quiz");
   }
 
   return teams;
@@ -40,14 +36,14 @@ async function checkUserCanViewDashboard(member: string, team: string) {
 export default async function Page({
   params,
 }: {
-  params: Promise<{ member: string; team: string }>;
+  params: Promise<{ team: string }>;
 }) {
-  const { member, team } = await params;
-  await checkUserCanViewDashboard(member, team);
+  const { team } = await params;
+  await checkUserCanViewDashboard(team);
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar teams={getTeamsAction()} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">

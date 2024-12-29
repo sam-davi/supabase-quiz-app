@@ -32,11 +32,7 @@ export const createTeamAction = async (formData: FormData) => {
   }
 
   if (await isTeamHostAction(member)) {
-    return encodedRedirect(
-      "error",
-      `/quiz/${member}`,
-      "You are already a host",
-    );
+    return encodedRedirect("error", "/quiz", "You are already a host");
   }
 
   const { slug } = await db.rls(async (tx) => {
@@ -48,21 +44,17 @@ export const createTeamAction = async (formData: FormData) => {
       .returning();
 
     if (!team) {
-      return encodedRedirect(
-        "error",
-        `/quiz/${member}`,
-        "Failed to create team",
-      );
+      return encodedRedirect("error", "/quiz", "Failed to create team");
     }
 
     return team;
   });
 
   if (!slug) {
-    return encodedRedirect("error", `/quiz/${member}`, "Failed to create team");
+    return encodedRedirect("error", "/quiz", "Failed to create team");
   }
 
-  return redirect(`/quiz/${member}/${slug}`);
+  return redirect(`/quiz/${slug}`);
 };
 
 export const getTeamAction = async () => {
@@ -70,8 +62,10 @@ export const getTeamAction = async () => {
 
   const member = (await getProfileAction()).slug;
 
+  let slug: string | null = null;
+
   if (!member) {
-    return encodedRedirect("error", "/quiz", "Failed to get profile");
+    return { slug };
   }
 
   const team = await db.rls(async (tx) => {
@@ -82,7 +76,7 @@ export const getTeamAction = async () => {
     });
   });
 
-  const slug = team?.team ?? null;
+  slug = team?.team ?? null;
 
   return { slug };
 };
