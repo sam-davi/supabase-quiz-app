@@ -2,20 +2,17 @@
 
 import * as React from "react";
 import {
-  AudioWaveform,
   BookOpen,
+  BookOpenCheck,
   Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
+  ChartNoAxesCombined,
+  MapPinned,
   Settings2,
   SquareTerminal,
+  Users,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
@@ -25,7 +22,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { getTeamsAction } from "@/server/actions/teams";
 
 // This is sample data.
 const data = {
@@ -34,28 +30,11 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
-      title: "Playground",
+      title: "Dashboard",
       url: "#",
-      icon: SquareTerminal,
+      icon: ChartNoAxesCombined,
       isActive: true,
       items: [
         {
@@ -73,86 +52,49 @@ const data = {
       ],
     },
     {
-      title: "Models",
+      title: "Quiz Scores",
       url: "#",
-      icon: Bot,
+      icon: BookOpenCheck,
       items: [
         {
-          title: "Genesis",
+          title: "Round Stats",
           url: "#",
         },
         {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
+          title: "Add Quiz Night",
           url: "#",
         },
       ],
     },
     {
-      title: "Documentation",
+      title: "Quiz Locations",
       url: "#",
-      icon: BookOpen,
+      icon: MapPinned,
       items: [
         {
-          title: "Introduction",
+          title: "Rate Locations",
           url: "#",
         },
         {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
+          title: "Add Location",
           url: "#",
         },
       ],
     },
     {
-      title: "Settings",
+      title: "Quiz Team",
       url: "#",
-      icon: Settings2,
+      icon: Users,
       items: [
         {
-          title: "General",
+          title: "Review Team Requests",
           url: "#",
         },
         {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "Invite Members",
           url: "#",
         },
       ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
     },
   ],
 };
@@ -172,7 +114,6 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
