@@ -29,7 +29,7 @@ export function TeamSwitcher({
   }[];
 }) {
   const { isMobile } = useSidebar();
-  const { member, team }: { member: string; team: string } = useParams();
+  const { team }: { team: string } = useParams();
   const [activeTeam, setActiveTeam] = React.useState(
     teams.find((t) => t.slug === team),
   );
@@ -43,7 +43,7 @@ export function TeamSwitcher({
       return;
     }
     setActiveTeam(team);
-    redirect(`/quiz/${member}/${team.slug}`);
+    redirect(`/quiz/${team.slug}`);
   };
 
   return (
