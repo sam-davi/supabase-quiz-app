@@ -103,7 +103,7 @@ export function AppSidebar({
   teams: Promise<{ slug: string | null; name: string }[]>;
 } & React.ComponentProps<typeof Sidebar>) {
   const { team }: { team: string } = useParams();
-  const path = usePathname().split("/")[3] || "";
+  const path = usePathname().split("/")[3] ?? "";
   const teamsData = React.use(teams);
 
   console.log(path);

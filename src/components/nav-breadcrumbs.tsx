@@ -65,7 +65,7 @@ export default function NavBreadcrumbs() {
           <BreadcrumbLink href={dashboardPath}>Dashboard</BreadcrumbLink>
         </BreadcrumbItem>
         {paths.slice(2).map((path, index) => {
-          let href = `/${paths.slice(0, index + 3).join("/")}`;
+          const href = `/${paths.slice(0, index + 3).join("/")}`;
           return (
             <BreadcrumbListItem
               key={index}
