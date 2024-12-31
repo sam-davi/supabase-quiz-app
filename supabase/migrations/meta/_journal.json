@@ -29,6 +29,76 @@
       "when": 1735259282004,
       "tag": "20241227001802_members",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1735523152964,
+      "tag": "20241230014552_locations",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1735523285523,
+      "tag": "20241230014805_categories",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1735523350849,
+      "tag": "20241230014910_locations_slug_trigger",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1735523364933,
+      "tag": "20241230014924_categories_slug_trigger",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1735533287648,
+      "tag": "20241230043447_rounds",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1735592974180,
+      "tag": "20241230210934_scores",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1735593381264,
+      "tag": "20241230211621_category_stats",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1735594140258,
+      "tag": "20241230212900_rounds_before_insert_trigger",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1735594686618,
+      "tag": "20241230213806_rounds_after_upsert_trigger",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1735596448428,
+      "tag": "20241230220728_check_constraint",
+      "breakpoints": true
     }
   ]
 }

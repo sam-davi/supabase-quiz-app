@@ -1,0 +1,2 @@
+ALTER TABLE "rounds" ADD CONSTRAINT "rounds_out_of_greater_than_zero" CHECK ("rounds"."out_of" > 0);--> statement-breakpoint
+ALTER TABLE "scores" ADD CONSTRAINT "scores_out_of_greater_than_zero" CHECK ("scores"."out_of" > 0);
