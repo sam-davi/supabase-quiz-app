@@ -15,7 +15,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-import { authenticatedRole, authUsers } from "drizzle-orm/supabase";
+import { authenticatedRole, authUid, authUsers } from "drizzle-orm/supabase";
 
 export const teams = pgTable(
   "teams",
@@ -36,11 +36,12 @@ export const teams = pgTable(
   },
   (table) => [
     index("teams_name_idx").on(table.name),
+    index("teams_created_by_idx").on(table.createdBy),
     uniqueIndex("teams_slug_idx").on(table.slug),
     pgPolicy("authenticated user can create team", {
       for: "insert",
       to: authenticatedRole,
-      withCheck: sql`auth.uid() = ${table.createdBy}`,
+      withCheck: sql`${authUid} = ${table.createdBy}`,
     }),
     pgPolicy("team members can select team", {
       for: "select",
@@ -77,16 +78,17 @@ export const profiles = pgTable(
   },
   (table) => [
     index("profiles_name_idx").on(table.name),
+    index("profiles_user_id_idx").on(table.userId),
     uniqueIndex("profiles_slug_idx").on(table.slug),
     pgPolicy("authenticated user can create profile", {
       for: "insert",
       to: authenticatedRole,
-      withCheck: sql`auth.uid() = ${table.userId}`,
+      withCheck: sql`${authUid} = ${table.userId}`,
     }),
     pgPolicy("authenticated user can select profile", {
       for: "select",
       to: authenticatedRole,
-      using: sql`auth.uid() = ${table.userId}`,
+      using: sql`${authUid} = ${table.userId}`,
     }),
   ],
 );
@@ -115,6 +117,7 @@ export const members = pgTable(
   },
   (table) => [
     index("members_member_idx").on(table.member),
+    index("members_team_idx").on(table.team),
     uniqueIndex("members_team_member_idx").on(table.team, table.member),
     pgPolicy("team host can create member", {
       for: "insert",
@@ -164,6 +167,7 @@ export const locations = pgTable(
   },
   (table) => [
     index("locations_name_idx").on(table.name),
+    index("locations_team_idx").on(table.team),
     uniqueIndex("locations_team_slug").on(table.team, table.slug),
     pgPolicy("team member can create location", {
       for: "insert",
@@ -214,6 +218,7 @@ export const categories = pgTable(
   },
   (table) => [
     index("categories_name_idx").on(table.name),
+    index("categories_team_idx").on(table.team),
     uniqueIndex("categories_team_slug").on(table.team, table.slug),
     pgPolicy("team member can create category", {
       for: "insert",
@@ -283,6 +288,9 @@ export const rounds = pgTable(
       columns: [table.category, table.team],
       foreignColumns: [categories.slug, categories.team],
     }),
+    index("rounds_team_idx").on(table.team),
+    index("rounds_team_location_idx").on(table.team, table.location),
+    index("rounds_team_category_idx").on(table.team, table.category),
     uniqueIndex("rounds_team_date_location_round_number_idx").on(
       table.team,
       table.quizDate,
@@ -351,6 +359,8 @@ export const scores = pgTable(
       columns: [table.location, table.team],
       foreignColumns: [locations.slug, locations.team],
     }),
+    index("scores_team_idx").on(table.team),
+    index("scores_team_location_idx").on(table.team, table.location),
     uniqueIndex("scores_team_date_location_idx").on(
       table.team,
       table.quizDate,

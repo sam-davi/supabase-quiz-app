@@ -6,6 +6,7 @@ import { createDrizzleSupabaseClient } from "../db";
 import { members, teams } from "../db/schema";
 import { getProfileAction } from "./profiles";
 import { and, desc, eq, inArray } from "drizzle-orm";
+import { authUid } from "drizzle-orm/supabase";
 
 const isTeamHostAction = async (member: string) => {
   const db = await createDrizzleSupabaseClient();
@@ -60,12 +61,15 @@ export const createTeamAction = async (formData: FormData) => {
   }
 
   const { slug } = await db.rls(async (tx) => {
-    const [team] = await tx
-      .insert(teams)
-      .values({
-        name,
-      })
-      .returning();
+    await tx.insert(teams).values({
+      name,
+    });
+
+    const team = await tx.query.teams.findFirst({
+      columns: { slug: true },
+      where: (row, { eq, and }) =>
+        and(eq(row.name, name), eq(row.createdBy, authUid)),
+    });
 
     if (!team) {
       return encodedRedirect("error", "/quiz", "Failed to create team");

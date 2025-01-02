@@ -1,0 +1,3 @@
+ALTER POLICY "authenticated user can create profile" ON "profiles" TO authenticated WITH CHECK ((select auth.uid()) = "profiles"."user_id");--> statement-breakpoint
+ALTER POLICY "authenticated user can select profile" ON "profiles" TO authenticated USING ((select auth.uid()) = "profiles"."user_id");--> statement-breakpoint
+ALTER POLICY "authenticated user can create team" ON "teams" TO authenticated WITH CHECK ((select auth.uid()) = "teams"."created_by");
