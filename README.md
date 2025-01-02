@@ -9,7 +9,7 @@
 - [x] Add authentication (supabase auth - email/password)
 - [ ] Add authentication (supabase auth - google)
 - [ ] Add authentication (supabase auth - apple)
-- [ ] Set up RLS (supabase auth)
+- [x] Set up RLS (supabase auth)
 - [ ] Error management (sentry)
 - [ ] Add analytics (posthog)
 - [ ] Add rate limiter (upstash)

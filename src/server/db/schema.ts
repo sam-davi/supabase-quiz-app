@@ -165,6 +165,22 @@ export const locations = pgTable(
   (table) => [
     index("locations_name_idx").on(table.name),
     uniqueIndex("locations_team_slug").on(table.team, table.slug),
+    pgPolicy("team member can create location", {
+      for: "insert",
+      to: authenticatedRole,
+      withCheck: sql`private.is_team_member(${table.team})`,
+    }),
+    pgPolicy("team member can select location", {
+      for: "select",
+      to: authenticatedRole,
+      using: sql`private.is_team_member(${table.team})`,
+    }),
+    pgPolicy("team member can update location", {
+      for: "update",
+      to: authenticatedRole,
+      using: sql`private.is_team_member(${table.team})`,
+      withCheck: sql`private.is_team_member(${table.team})`,
+    }),
   ],
 );
 

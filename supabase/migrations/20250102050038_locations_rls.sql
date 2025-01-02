@@ -1,0 +1,4 @@
+ALTER TABLE "locations" ENABLE ROW LEVEL SECURITY;--> statement-breakpoint
+CREATE POLICY "team member can create location" ON "locations" AS PERMISSIVE FOR INSERT TO "authenticated" WITH CHECK (private.is_team_member("locations"."team"));--> statement-breakpoint
+CREATE POLICY "team member can select location" ON "locations" AS PERMISSIVE FOR SELECT TO "authenticated" USING (private.is_team_member("locations"."team"));--> statement-breakpoint
+CREATE POLICY "team member can update location" ON "locations" AS PERMISSIVE FOR UPDATE TO "authenticated" USING (private.is_team_member("locations"."team")) WITH CHECK (private.is_team_member("locations"."team"));
