@@ -7,8 +7,8 @@
 - [x] Make it work with supabase/drizzle
 - [x] Attach database to UI
 - [x] Add authentication (supabase auth - email/password)
-- [ ] Add authentication (supabase auth - google)
-- [ ] Add authentication (supabase auth - apple)
+- [x] Add authentication (supabase auth - google)
+- [x] Add authentication (supabase auth - github)
 - [x] Set up RLS (supabase auth)
 - [ ] Error management (sentry)
 - [ ] Add analytics (posthog)

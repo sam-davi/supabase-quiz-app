@@ -4,6 +4,7 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Provider } from "@supabase/supabase-js";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email") as string;
@@ -54,4 +55,32 @@ export const signInAction = async (formData: FormData) => {
   }
 
   return redirect("/quiz");
+};
+
+const signInWithOAuthAction = async (provider: Provider) => {
+  const supabase = await createClient();
+  const origin = (await headers()).get("origin");
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+    },
+  });
+
+  if (data.url) {
+    redirect(data.url);
+  }
+
+  if (error) {
+    return encodedRedirect("error", "/sign-in", error.message);
+  }
+};
+
+export const signInWithGoogleAction = async () => {
+  return signInWithOAuthAction("google");
+};
+
+export const signInWithGithubAction = async () => {
+  return signInWithOAuthAction("github");
 };
