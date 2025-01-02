@@ -40,5 +40,20 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(new URL("/quiz", request.url));
   }
 
+  const team = request.nextUrl.pathname.split("/")[2] ?? "";
+
+  const result = await supabase.rpc("get_role_from_team", {
+    team_slug: team,
+  });
+
+  if (
+    !!team &&
+    (result.error ||
+      !result.data ||
+      !["host", "member"].includes(result.data as string))
+  ) {
+    return NextResponse.redirect(new URL("/quiz", request.url));
+  }
+
   return supabaseResponse;
 }
