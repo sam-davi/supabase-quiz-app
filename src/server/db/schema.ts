@@ -6,6 +6,7 @@ import {
   foreignKey,
   index,
   integer,
+  pgPolicy,
   pgTable,
   real,
   serial,
@@ -14,7 +15,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-import { authUsers } from "drizzle-orm/supabase";
+import { authenticatedRole, authUsers } from "drizzle-orm/supabase";
 
 export const teams = pgTable(
   "teams",
@@ -36,6 +37,16 @@ export const teams = pgTable(
   (table) => [
     index("teams_name_idx").on(table.name),
     uniqueIndex("teams_slug_idx").on(table.slug),
+    pgPolicy("authenticated user can create team", {
+      for: "insert",
+      to: authenticatedRole,
+      withCheck: sql`auth.uid() = ${table.createdBy}`,
+    }),
+    pgPolicy("team members can select team", {
+      for: "select",
+      to: authenticatedRole,
+      using: sql`private.is_team_member(${table.slug})`,
+    }),
   ],
 );
 
@@ -67,6 +78,16 @@ export const profiles = pgTable(
   (table) => [
     index("profiles_name_idx").on(table.name),
     uniqueIndex("profiles_slug_idx").on(table.slug),
+    pgPolicy("authenticated user can create profile", {
+      for: "insert",
+      to: authenticatedRole,
+      withCheck: sql`auth.uid() = ${table.userId}`,
+    }),
+    pgPolicy("authenticated user can select profile", {
+      for: "select",
+      to: authenticatedRole,
+      using: sql`auth.uid() = ${table.userId}`,
+    }),
   ],
 );
 
@@ -95,6 +116,22 @@ export const members = pgTable(
   (table) => [
     index("members_member_idx").on(table.member),
     uniqueIndex("members_team_member_idx").on(table.team, table.member),
+    pgPolicy("team host can create member", {
+      for: "insert",
+      to: authenticatedRole,
+      withCheck: sql`private.is_team_host(${table.team})`,
+    }),
+    pgPolicy("team member can select member", {
+      for: "select",
+      to: authenticatedRole,
+      using: sql`private.is_team_member(${table.team})`,
+    }),
+    pgPolicy("team host can update member", {
+      for: "update",
+      to: authenticatedRole,
+      using: sql`private.is_team_host(${table.team})`,
+      withCheck: sql`private.is_team_host(${table.team})`,
+    }),
   ],
 );
 
@@ -151,6 +188,7 @@ export const categories = pgTable(
     minPercentScore: real("min_percent_score"),
     maxPercentScore: real("max_percent_score"),
     averagePercentScore: real("average_percent_score"),
+    rounds: integer("rounds").default(1),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -161,6 +199,22 @@ export const categories = pgTable(
   (table) => [
     index("categories_name_idx").on(table.name),
     uniqueIndex("categories_team_slug").on(table.team, table.slug),
+    pgPolicy("team member can create category", {
+      for: "insert",
+      to: authenticatedRole,
+      withCheck: sql`private.is_team_member(${table.team})`,
+    }),
+    pgPolicy("team member can select category", {
+      for: "select",
+      to: authenticatedRole,
+      using: sql`private.is_team_member(${table.team})`,
+    }),
+    pgPolicy("team member can update category", {
+      for: "update",
+      to: authenticatedRole,
+      using: sql`private.is_team_member(${table.team})`,
+      withCheck: sql`private.is_team_member(${table.team})`,
+    }),
   ],
 );
 
@@ -220,6 +274,22 @@ export const rounds = pgTable(
       table.roundNumber,
     ),
     check("rounds_out_of_greater_than_zero", sql`${table.outOf} > 0`),
+    pgPolicy("team member can create round", {
+      for: "insert",
+      to: authenticatedRole,
+      withCheck: sql`private.is_team_member(${table.team})`,
+    }),
+    pgPolicy("team member can select round", {
+      for: "select",
+      to: authenticatedRole,
+      using: sql`private.is_team_member(${table.team})`,
+    }),
+    pgPolicy("team member can update round", {
+      for: "update",
+      to: authenticatedRole,
+      using: sql`private.is_team_member(${table.team})`,
+      withCheck: sql`private.is_team_member(${table.team})`,
+    }),
   ],
 );
 
@@ -249,6 +319,7 @@ export const scores = pgTable(
       .references(() => teams.slug),
     score: real("score").notNull(),
     outOf: real("out_of").default(10),
+    rounds: integer("rounds").default(1),
     percentScore: real("percent_score").generatedAlwaysAs(
       (): SQL => sql`${scores.score} / ${scores.outOf} * 100`,
     ),
@@ -270,6 +341,22 @@ export const scores = pgTable(
       table.location,
     ),
     check("scores_out_of_greater_than_zero", sql`${table.outOf} > 0`),
+    pgPolicy("team member can create score", {
+      for: "insert",
+      to: authenticatedRole,
+      withCheck: sql`private.is_team_member(${table.team})`,
+    }),
+    pgPolicy("team member can select score", {
+      for: "select",
+      to: authenticatedRole,
+      using: sql`private.is_team_member(${table.team})`,
+    }),
+    pgPolicy("team member can update score", {
+      for: "update",
+      to: authenticatedRole,
+      using: sql`private.is_team_member(${table.team})`,
+      withCheck: sql`private.is_team_member(${table.team})`,
+    }),
   ],
 );
 

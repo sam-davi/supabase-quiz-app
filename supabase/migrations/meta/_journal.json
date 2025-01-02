@@ -99,6 +99,55 @@
       "when": 1735596448428,
       "tag": "20241230220728_check_constraint",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1735788589674,
+      "tag": "20250102032949_is_team_member_function",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1735789659018,
+      "tag": "20250102034739_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1735791155263,
+      "tag": "20250102041235_update_teams_slug_trigger",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1735791219957,
+      "tag": "20250102041339_update_profile_slug_trigger",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1735791465389,
+      "tag": "20250102041745_update_set_host_trigger",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1735792362953,
+      "tag": "20250102043242_add_rounds_to_categories_and_scores",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1735792376251,
+      "tag": "20250102043256_update_rounds_after_upsert_trigger",
+      "breakpoints": true
     }
   ]
 }
