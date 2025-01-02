@@ -21,6 +21,30 @@ const isTeamHostAction = async (member: string) => {
   return !!team;
 };
 
+export const getTeamRoleAction = async (team: string) => {
+  const db = await createDrizzleSupabaseClient();
+
+  const member = (await getProfileAction()).slug;
+
+  let role: string | null = null;
+
+  if (!member) {
+    return role;
+  }
+
+  const result = await db.rls(async (tx) => {
+    return await tx.query.members.findFirst({
+      columns: { role: true },
+      where: (row, { eq, and }) =>
+        and(eq(row.team, team), eq(row.member, member)),
+    });
+  });
+
+  role = result?.role ?? null;
+
+  return role;
+};
+
 export const createTeamAction = async (formData: FormData) => {
   const name = formData.get("name") as string;
   const db = await createDrizzleSupabaseClient();

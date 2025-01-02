@@ -106,8 +106,6 @@ export function AppSidebar({
   const path = usePathname().split("/")[3] ?? "";
   const teamsData = React.use(teams);
 
-  console.log(path);
-
   const navMain = [
     {
       title: "Dashboard",
