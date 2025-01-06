@@ -67,5 +67,5 @@ export const upsertRoundsAction = async (formData: FormData) => {
       });
   });
 
-  return redirect(`/quiz/${team}`);
+  return redirect(`/quiz/${team}/scores/add`);
 };
