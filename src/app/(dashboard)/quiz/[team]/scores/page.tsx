@@ -1,11 +1,29 @@
-import { ScoresChartComponent } from "@/components/charts/scores-chart";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   nextScorePageAction,
   prevScorePageAction,
 } from "@/server/actions/scores";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 import React from "react";
 
 export default async function Scores({
@@ -34,75 +52,116 @@ export default async function Scores({
         : await nextScorePageAction(team);
   }
 
-  const chartConfig = {
-    percentScore: {
-      label: "Score",
-      color: "hsl(var(--chart-2))",
-    },
-  };
-
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
       <Card>
-        <CardHeader className="text-center">
-          <CardTitle className="text-xl">Scores</CardTitle>
+        <CardHeader>
+          <CardTitle>Scores</CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-between gap-2">
-          <form>
-            <input
-              type="hidden"
-              name="location"
-              value={scores[0]?.location?.slug ?? ""}
-              className="hidden"
-            />
-            <input
-              type="hidden"
-              name="date"
-              value={scores[0]?.quizDate ?? ""}
-              className="hidden"
-            />
-            <input
-              type="hidden"
-              name="direction"
-              value="prev"
-              className="hidden"
-            />
-            <Button type="submit" size="icon">
-              <ChevronLeft />
-            </Button>
-          </form>
-          <div className="h-full w-full max-w-4xl">
-            <ScoresChartComponent
-              data={scores}
-              config={chartConfig}
-              xAxisKey="quizDate"
-              barKey="percentScore"
-            />
-          </div>
-          <form>
-            <input
-              type="hidden"
-              name="location"
-              value={scores.slice(-1)[0]?.location?.slug ?? ""}
-              className="hidden"
-            />
-            <input
-              type="hidden"
-              name="date"
-              value={scores.slice(-1)[0]?.quizDate ?? ""}
-              className="hidden"
-            />
-            <input
-              type="hidden"
-              name="direction"
-              value="next"
-              className="hidden"
-            />
-            <Button type="submit" size="icon">
-              <ChevronRight />
-            </Button>
-          </form>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="hidden md:table-cell">Location</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead className="hidden lg:table-cell">Rounds</TableHead>
+                <TableHead>Score</TableHead>
+                <TableHead>Out of</TableHead>
+                <TableHead>Percent</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {scores.map((score) => (
+                <TableRow key={score.id}>
+                  <TableCell className="hidden md:table-cell">
+                    {score.location.name}
+                  </TableCell>
+                  <TableCell>{score.quizDate}</TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    {score.rounds}
+                  </TableCell>
+                  <TableCell>{score.score}</TableCell>
+                  <TableCell>{score.outOf}</TableCell>
+                  <TableCell>{score.percentScore?.toFixed(2)}%</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
+        <CardFooter className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <form>
+              <input
+                type="hidden"
+                name="direction"
+                value="next"
+                className="hidden"
+              />
+              <Button type="submit" size="icon">
+                <ChevronsLeft />
+              </Button>
+            </form>
+            <form>
+              <input
+                type="hidden"
+                name="location"
+                value={scores[0]?.location?.slug ?? ""}
+                className="hidden"
+              />
+              <input
+                type="hidden"
+                name="date"
+                value={scores[0]?.quizDate ?? ""}
+                className="hidden"
+              />
+              <input
+                type="hidden"
+                name="direction"
+                value="prev"
+                className="hidden"
+              />
+              <Button type="submit" size="icon">
+                <ChevronLeft />
+              </Button>
+            </form>
+          </div>
+          <div className="flex items-center gap-2">
+            <form>
+              <input
+                type="hidden"
+                name="location"
+                value={scores.slice(-1)[0]?.location?.slug ?? ""}
+                className="hidden"
+              />
+              <input
+                type="hidden"
+                name="date"
+                value={scores.slice(-1)[0]?.quizDate ?? ""}
+                className="hidden"
+              />
+              <input
+                type="hidden"
+                name="direction"
+                value="next"
+                className="hidden"
+              />
+              <Button type="submit" size="icon">
+                <ChevronRight />
+              </Button>
+            </form>
+            <form>
+              <input
+                type="hidden"
+                name="direction"
+                value="prev"
+                className="hidden"
+              />
+              <Button type="submit" size="icon">
+                <ChevronsRight />
+              </Button>
+            </form>
+          </div>
+        </CardFooter>
       </Card>
     </div>
   );
