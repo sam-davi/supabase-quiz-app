@@ -82,7 +82,7 @@ export default async function Scores({
                   </TableCell>
                   <TableCell>{score.score}</TableCell>
                   <TableCell>{score.outOf}</TableCell>
-                  <TableCell>{score.percentScore?.toFixed(2)}%</TableCell>
+                  <TableCell>{score.percentScore?.toFixed(0)}%</TableCell>
                 </TableRow>
               ))}
             </TableBody>

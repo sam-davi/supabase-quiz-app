@@ -66,12 +66,12 @@ export default async function RoundStats({
             <TableHeader>
               <TableRow>
                 <TableHead>Category</TableHead>
-                <TableHead>Average Score (%)</TableHead>
+                <TableHead>Average Score</TableHead>
                 <TableHead className="hidden lg:table-cell">
-                  Min Score (%)
+                  Min Score
                 </TableHead>
                 <TableHead className="hidden lg:table-cell">
-                  Max Score (%)
+                  Max Score
                 </TableHead>
                 <TableHead>Rounds</TableHead>
               </TableRow>
@@ -80,12 +80,14 @@ export default async function RoundStats({
               {scores.map((score) => (
                 <TableRow key={score.slug}>
                   <TableCell>{score.name}</TableCell>
-                  <TableCell>{score.averagePercentScore}</TableCell>
-                  <TableCell className="hidden lg:table-cell">
-                    {score.minPercentScore}
+                  <TableCell>
+                    {score.averagePercentScore?.toFixed(0)}%
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
-                    {score.maxPercentScore}
+                    {score.minPercentScore?.toFixed(0)}%
+                  </TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    {score.maxPercentScore?.toFixed(0)}%
                   </TableCell>
                   <TableCell>{score.rounds}</TableCell>
                 </TableRow>
