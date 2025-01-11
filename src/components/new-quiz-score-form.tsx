@@ -14,7 +14,7 @@ export function NewQuizScoreForm({
 }) {
   return (
     <form>
-      <div className="flex items-end justify-center gap-6">
+      <div className="flex flex-col justify-center gap-6 md:flex-row md:items-end">
         <div className="grid gap-2">
           <Label htmlFor="location">Location</Label>
           <Input

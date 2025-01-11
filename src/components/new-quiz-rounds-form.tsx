@@ -1,14 +1,18 @@
 import React from "react";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { SubmitButton } from "./submit-button";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { SubmitButton } from "@/components/submit-button";
 import { upsertRoundsAction } from "@/server/actions/rounds";
 
 function NewQuizRound({ index }: { index: number }) {
   return (
-    <div className="flex items-end justify-center gap-6">
+    <div className="flex flex-col justify-center gap-6 md:flex-row md:items-end">
       <div className="grid gap-2">
-        <Label htmlFor={`round_number-${index}`} hidden={index !== 0}>
+        <Label
+          className={index !== 0 ? "md:hidden" : ""}
+          htmlFor={`round_number-${index}`}
+        >
           Round #
         </Label>
         <Input
@@ -22,7 +26,10 @@ function NewQuizRound({ index }: { index: number }) {
         />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor={`category-${index}`} hidden={index !== 0}>
+        <Label
+          className={index !== 0 ? "md:hidden" : ""}
+          htmlFor={`category-${index}`}
+        >
           Category
         </Label>
         <Input
@@ -34,7 +41,10 @@ function NewQuizRound({ index }: { index: number }) {
         />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor={`score-${index}`} hidden={index !== 0}>
+        <Label
+          className={index !== 0 ? "md:hidden" : ""}
+          htmlFor={`score-${index}`}
+        >
           Score
         </Label>
         <Input
@@ -48,7 +58,10 @@ function NewQuizRound({ index }: { index: number }) {
         />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor={`out_of-${index}`} hidden={index !== 0}>
+        <Label
+          className={index !== 0 ? "md:hidden" : ""}
+          htmlFor={`out_of-${index}`}
+        >
           Out of
         </Label>
         <Input
@@ -62,7 +75,10 @@ function NewQuizRound({ index }: { index: number }) {
         />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor={`double-${index}`} hidden={index !== 0}>
+        <Label
+          className={index !== 0 ? "md:hidden" : ""}
+          htmlFor={`double-${index}`}
+        >
           Double
         </Label>
         <div className="flex h-9 w-12 items-center justify-center">
@@ -74,6 +90,7 @@ function NewQuizRound({ index }: { index: number }) {
             defaultChecked={false}
           />
         </div>
+        <Separator className="md:hidden" />
       </div>
     </div>
   );
