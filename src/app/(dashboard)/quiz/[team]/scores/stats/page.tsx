@@ -1,3 +1,4 @@
+import { SubmitButton } from "@/components/submit-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,6 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -23,6 +26,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  RefreshCw,
 } from "lucide-react";
 import React from "react";
 
@@ -35,31 +39,57 @@ export default async function RoundStats({
     direction: "next" | "prev" | undefined;
     category: string | undefined;
     averagePercentScore: number | undefined;
+    minRounds: number | undefined;
   }>;
 }) {
   const { team } = await params;
-  const { direction, category, averagePercentScore } = await searchParams;
+  const {
+    direction,
+    category,
+    averagePercentScore,
+    minRounds = 1,
+  } = await searchParams;
   const cursor =
     category && averagePercentScore
       ? { category, averagePercentScore }
       : undefined;
   let scores =
     direction === "prev"
-      ? await prevCategoryPageAction(team, cursor)
-      : await nextCategoryPageAction(team, cursor);
+      ? await prevCategoryPageAction(team, cursor, minRounds)
+      : await nextCategoryPageAction(team, cursor, minRounds);
 
   if (scores.length === 0) {
     scores =
       direction === "prev"
-        ? await prevCategoryPageAction(team)
-        : await nextCategoryPageAction(team);
+        ? await prevCategoryPageAction(team, undefined, minRounds)
+        : await nextCategoryPageAction(team, undefined, minRounds);
   }
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
       <Card>
         <CardHeader>
-          <CardTitle>Round Stats</CardTitle>
+          <CardTitle>
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>Round Stats</div>
+              <form className="flex items-center justify-between gap-2">
+                <Label htmlFor="minRounds">Min Rounds:</Label>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="number"
+                    name="minRounds"
+                    defaultValue={minRounds}
+                    min={1}
+                    max={100}
+                    className="w-24"
+                  />
+                  <SubmitButton size="icon">
+                    <RefreshCw />
+                  </SubmitButton>
+                </div>
+              </form>
+            </div>
+          </CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-between gap-4">
           <Table>
@@ -104,6 +134,12 @@ export default async function RoundStats({
                 value="next"
                 className="hidden"
               />
+              <input
+                type="hidden"
+                name="minRounds"
+                value={minRounds}
+                className="hidden"
+              />
               <Button type="submit" size="icon">
                 <ChevronsLeft />
               </Button>
@@ -125,6 +161,12 @@ export default async function RoundStats({
                 type="hidden"
                 name="direction"
                 value="prev"
+                className="hidden"
+              />
+              <input
+                type="hidden"
+                name="minRounds"
+                value={minRounds}
                 className="hidden"
               />
               <Button type="submit" size="icon">
@@ -152,6 +194,12 @@ export default async function RoundStats({
                 value="next"
                 className="hidden"
               />
+              <input
+                type="hidden"
+                name="minRounds"
+                value={minRounds}
+                className="hidden"
+              />
               <Button type="submit" size="icon">
                 <ChevronRight />
               </Button>
@@ -161,6 +209,12 @@ export default async function RoundStats({
                 type="hidden"
                 name="direction"
                 value="prev"
+                className="hidden"
+              />
+              <input
+                type="hidden"
+                name="minRounds"
+                value={minRounds}
                 className="hidden"
               />
               <Button type="submit" size="icon">

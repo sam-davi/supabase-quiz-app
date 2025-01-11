@@ -7,6 +7,7 @@ import { getTeamRoleAction } from "./teams";
 export const nextCategoryPageAction = async (
   team: string,
   cursor?: { category: string; averagePercentScore: number },
+  minRounds = 1,
   pageSize = 10,
 ) => {
   const db = await createDrizzleSupabaseClient();
@@ -32,10 +33,11 @@ export const nextCategoryPageAction = async (
         averagePercentScore: true,
         rounds: true,
       },
-      where: (row, { eq, and, lt, or }) =>
+      where: (row, { eq, and, lt, or, gte }) =>
         cursor
           ? and(
               eq(row.team, team),
+              gte(row.rounds, minRounds),
               or(
                 lt(row.averagePercentScore, cursor.averagePercentScore),
                 and(
@@ -44,7 +46,7 @@ export const nextCategoryPageAction = async (
                 ),
               ),
             )
-          : eq(row.team, team),
+          : and(eq(row.team, team), gte(row.rounds, minRounds)),
       orderBy: (row, { desc }) => [
         desc(row.averagePercentScore),
         desc(row.slug),
@@ -59,6 +61,7 @@ export const nextCategoryPageAction = async (
 export const prevCategoryPageAction = async (
   team: string,
   cursor?: { category: string; averagePercentScore: number },
+  minRounds = 1,
   pageSize = 10,
 ) => {
   const db = await createDrizzleSupabaseClient();
@@ -84,10 +87,11 @@ export const prevCategoryPageAction = async (
         averagePercentScore: true,
         rounds: true,
       },
-      where: (row, { eq, and, gt, or }) =>
+      where: (row, { eq, and, gt, or, gte }) =>
         cursor
           ? and(
               eq(row.team, team),
+              gte(row.rounds, minRounds),
               or(
                 gt(row.averagePercentScore, cursor.averagePercentScore),
                 and(
@@ -96,7 +100,7 @@ export const prevCategoryPageAction = async (
                 ),
               ),
             )
-          : eq(row.team, team),
+          : and(eq(row.team, team), gte(row.rounds, minRounds)),
       orderBy: (row, { asc }) => [asc(row.averagePercentScore), asc(row.slug)],
       limit: pageSize,
     });
