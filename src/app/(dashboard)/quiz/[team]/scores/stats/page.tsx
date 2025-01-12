@@ -47,7 +47,7 @@ export default async function RoundStats({
     direction,
     category,
     averagePercentScore,
-    minRounds = 1,
+    minRounds = 2,
   } = await searchParams;
   const cursor =
     category && averagePercentScore
@@ -96,10 +96,10 @@ export default async function RoundStats({
             <TableHeader>
               <TableRow>
                 <TableHead>Category</TableHead>
-                <TableHead>Average Score</TableHead>
                 <TableHead className="hidden lg:table-cell">
                   Min Score
                 </TableHead>
+                <TableHead>Avg Score</TableHead>
                 <TableHead className="hidden lg:table-cell">
                   Max Score
                 </TableHead>
@@ -110,11 +110,11 @@ export default async function RoundStats({
               {scores.map((score) => (
                 <TableRow key={score.slug}>
                   <TableCell>{score.name}</TableCell>
-                  <TableCell>
-                    {score.averagePercentScore?.toFixed(0)}%
-                  </TableCell>
                   <TableCell className="hidden lg:table-cell">
                     {score.minPercentScore?.toFixed(0)}%
+                  </TableCell>
+                  <TableCell>
+                    {score.averagePercentScore?.toFixed(0)}%
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
                     {score.maxPercentScore?.toFixed(0)}%
