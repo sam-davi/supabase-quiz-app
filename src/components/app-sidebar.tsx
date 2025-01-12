@@ -20,91 +20,22 @@ import {
 } from "@/components/ui/sidebar";
 import { useParams, usePathname } from "next/navigation";
 
-// This is sample data.
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: ChartNoAxesCombined,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Quiz Scores",
-      url: "#",
-      icon: BookOpenCheck,
-      items: [
-        {
-          title: "Round Stats",
-          url: "#",
-        },
-        {
-          title: "Add Quiz Night",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Quiz Locations",
-      url: "#",
-      icon: MapPinned,
-      items: [
-        {
-          title: "Rate Locations",
-          url: "#",
-        },
-        {
-          title: "Add Location",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Quiz Team",
-      url: "#",
-      icon: Users,
-      items: [
-        {
-          title: "Review Team Requests",
-          url: "#",
-        },
-        {
-          title: "Invite Members",
-          url: "#",
-        },
-      ],
-    },
-  ],
-};
-
 export function AppSidebar({
   teams,
+  user,
   ...props
 }: {
   teams: Promise<{ slug: string | null; name: string }[]>;
+  user: Promise<{
+    name: string;
+    email: string | null;
+    avatar?: string;
+  }>;
 } & React.ComponentProps<typeof Sidebar>) {
   const { team }: { team: string } = useParams();
   const path = usePathname().split("/")[3] ?? "";
   const teamsData = React.use(teams);
+  const userData = React.use(user);
 
   const navMain = [
     {
@@ -190,7 +121,7 @@ export function AppSidebar({
         <NavMain items={navMain} path={path} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

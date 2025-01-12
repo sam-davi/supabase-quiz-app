@@ -176,6 +176,20 @@
       "when": 1735852600636,
       "tag": "20250102211640_get_role_function",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1736658050300,
+      "tag": "20250112050050_add_email_to_profile",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1736658213431,
+      "tag": "20250112050333_add_email_to_profile_trigger",
+      "breakpoints": true
     }
   ]
 }

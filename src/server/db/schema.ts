@@ -69,6 +69,7 @@ export const profiles = pgTable(
       .references(() => authUsers.id),
     name: text("name").notNull(),
     slug: text("slug"),
+    email: text("email"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -93,8 +94,12 @@ export const profiles = pgTable(
   ],
 );
 
-export const profilesRelations = relations(profiles, ({ many }) => ({
+export const profilesRelations = relations(profiles, ({ one, many }) => ({
   members: many(members),
+  user: one(authUsers, {
+    fields: [profiles.userId],
+    references: [authUsers.id],
+  }),
 }));
 
 export const members = pgTable(

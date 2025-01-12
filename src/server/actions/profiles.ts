@@ -42,3 +42,20 @@ export const getProfileAction = async () => {
 
   return { slug };
 };
+
+export const getUserProfileAction = async () => {
+  const db = await createDrizzleSupabaseClient();
+
+  const profile = await db.rls(async (tx) => {
+    return await tx.query.profiles.findFirst({
+      columns: { name: true, slug: true, email: true },
+      where: (row, { eq }) => eq(row.userId, authUid),
+    });
+  });
+
+  if (!profile) {
+    return encodedRedirect("error", "/quiz", "Failed to get profile");
+  }
+
+  return profile;
+};
