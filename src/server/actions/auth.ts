@@ -84,3 +84,9 @@ export const signInWithGoogleAction = async () => {
 export const signInWithGithubAction = async () => {
   return signInWithOAuthAction("github");
 };
+
+export const signOutAction = async () => {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  return redirect("/sign-in");
+};

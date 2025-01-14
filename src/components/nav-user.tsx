@@ -5,7 +5,6 @@ import {
   Bell,
   ChevronsUpDown,
   CreditCard,
-  LogOut,
   Sparkles,
 } from "lucide-react";
 
@@ -26,6 +25,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { getInitials } from "@/lib/utils";
+import SignOutForm from "@/components/sign-out-form";
 
 export function NavUser({
   user,
@@ -104,8 +104,7 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <LogOut />
-              Log out
+              <SignOutForm />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
