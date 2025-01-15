@@ -1,3 +1,4 @@
+import AvgScoreChart from "@/components/d3/avgScoreChart";
 import { SubmitButton } from "@/components/submit-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -95,31 +96,41 @@ export default async function RoundStats({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Category</TableHead>
-                <TableHead className="hidden lg:table-cell">
+                <TableHead className="w-[80px]">Category</TableHead>
+                <TableHead className="w-[165px] text-center">Scores</TableHead>
+                <TableHead className="hidden w-[75px] text-center lg:table-cell">
                   Min Score
                 </TableHead>
-                <TableHead>Avg Score</TableHead>
-                <TableHead className="hidden lg:table-cell">
+                <TableHead className="hidden w-[75px] text-center lg:table-cell">
+                  Avg Score
+                </TableHead>
+                <TableHead className="hidden w-[75px] text-center lg:table-cell">
                   Max Score
                 </TableHead>
-                <TableHead>Rounds</TableHead>
+                <TableHead className="hidden w-[75px] text-center md:table-cell">
+                  Rounds
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {scores.map((score) => (
                 <TableRow key={score.slug}>
                   <TableCell>{score.name}</TableCell>
-                  <TableCell className="hidden lg:table-cell">
+                  <TableCell className="items-center justify-items-center">
+                    <AvgScoreChart data={score} />
+                  </TableCell>
+                  <TableCell className="hidden text-center lg:table-cell">
                     {score.minPercentScore?.toFixed(0)}%
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden text-center lg:table-cell">
                     {score.averagePercentScore?.toFixed(0)}%
                   </TableCell>
-                  <TableCell className="hidden lg:table-cell">
+                  <TableCell className="hidden text-center lg:table-cell">
                     {score.maxPercentScore?.toFixed(0)}%
                   </TableCell>
-                  <TableCell>{score.roundsPlayed}</TableCell>
+                  <TableCell className="hidden text-center md:table-cell">
+                    {score.roundsPlayed}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
