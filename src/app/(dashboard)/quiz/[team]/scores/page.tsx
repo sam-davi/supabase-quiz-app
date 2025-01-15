@@ -78,7 +78,7 @@ export default async function Scores({
                   </TableCell>
                   <TableCell>{score.quizDate}</TableCell>
                   <TableCell className="hidden lg:table-cell">
-                    {score.rounds}
+                    {score.roundsPlayed}
                   </TableCell>
                   <TableCell>{score.score}</TableCell>
                   <TableCell>{score.outOf}</TableCell>

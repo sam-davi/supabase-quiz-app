@@ -28,7 +28,7 @@ export const nextScorePageAction = async (
         score: true,
         outOf: true,
         percentScore: true,
-        rounds: true,
+        roundsPlayed: true,
         quizDate: true,
       },
       with: {
@@ -81,7 +81,7 @@ export const prevScorePageAction = async (
         score: true,
         outOf: true,
         percentScore: true,
-        rounds: true,
+        roundsPlayed: true,
         quizDate: true,
       },
       with: {

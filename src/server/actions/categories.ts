@@ -31,13 +31,20 @@ export const nextCategoryPageAction = async (
         minPercentScore: true,
         maxPercentScore: true,
         averagePercentScore: true,
-        rounds: true,
+        roundsPlayed: true,
+      },
+      with: {
+        rounds: {
+          columns: { quizDate: true, percentScore: true },
+          orderBy: (row, { desc }) => desc(row.quizDate),
+          limit: 100,
+        },
       },
       where: (row, { eq, and, lt, or, gte }) =>
         cursor
           ? and(
               eq(row.team, team),
-              gte(row.rounds, minRounds),
+              gte(row.roundsPlayed, minRounds),
               or(
                 lt(row.averagePercentScore, cursor.averagePercentScore),
                 and(
@@ -46,7 +53,7 @@ export const nextCategoryPageAction = async (
                 ),
               ),
             )
-          : and(eq(row.team, team), gte(row.rounds, minRounds)),
+          : and(eq(row.team, team), gte(row.roundsPlayed, minRounds)),
       orderBy: (row, { desc }) => [
         desc(row.averagePercentScore),
         desc(row.slug),
@@ -85,13 +92,20 @@ export const prevCategoryPageAction = async (
         minPercentScore: true,
         maxPercentScore: true,
         averagePercentScore: true,
-        rounds: true,
+        roundsPlayed: true,
+      },
+      with: {
+        rounds: {
+          columns: { quizDate: true, percentScore: true },
+          orderBy: (row, { desc }) => desc(row.quizDate),
+          limit: 100,
+        },
       },
       where: (row, { eq, and, gt, or, gte }) =>
         cursor
           ? and(
               eq(row.team, team),
-              gte(row.rounds, minRounds),
+              gte(row.roundsPlayed, minRounds),
               or(
                 gt(row.averagePercentScore, cursor.averagePercentScore),
                 and(
@@ -100,7 +114,7 @@ export const prevCategoryPageAction = async (
                 ),
               ),
             )
-          : and(eq(row.team, team), gte(row.rounds, minRounds)),
+          : and(eq(row.team, team), gte(row.roundsPlayed, minRounds)),
       orderBy: (row, { asc }) => [asc(row.averagePercentScore), asc(row.slug)],
       limit: pageSize,
     });

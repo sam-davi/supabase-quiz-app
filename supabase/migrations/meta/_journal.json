@@ -190,6 +190,13 @@
       "when": 1736658213431,
       "tag": "20250112050333_add_email_to_profile_trigger",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1736896004127,
+      "tag": "20250114230644_update_rounds_to_rounds_played",
+      "breakpoints": true
     }
   ]
 }

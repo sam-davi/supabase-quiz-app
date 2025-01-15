@@ -213,7 +213,7 @@ export const categories = pgTable(
     minPercentScore: real("min_percent_score"),
     maxPercentScore: real("max_percent_score"),
     averagePercentScore: real("average_percent_score"),
-    rounds: integer("rounds").default(1),
+    roundsPlayed: integer("rounds_played").default(1),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -348,7 +348,7 @@ export const scores = pgTable(
       .references(() => teams.slug),
     score: real("score").notNull(),
     outOf: real("out_of").default(10),
-    rounds: integer("rounds").default(1),
+    roundsPlayed: integer("rounds_played").default(1),
     percentScore: real("percent_score").generatedAlwaysAs(
       (): SQL => sql`${scores.score} / ${scores.outOf} * 100`,
     ),

@@ -119,7 +119,7 @@ export default async function RoundStats({
                   <TableCell className="hidden lg:table-cell">
                     {score.maxPercentScore?.toFixed(0)}%
                   </TableCell>
-                  <TableCell>{score.rounds}</TableCell>
+                  <TableCell>{score.roundsPlayed}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
