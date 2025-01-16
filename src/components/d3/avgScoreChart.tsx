@@ -1,15 +1,32 @@
+"use client";
+
 import React from "react";
 import * as d3 from "d3";
+import ChartContainer from "@/components/d3/ChartContainer";
 
-interface Props extends React.SVGProps<SVGSVGElement> {
-  data: {
-    minPercentScore: number | null;
-    averagePercentScore: number | null;
-    maxPercentScore: number | null;
-  };
+type Score = {
+  minPercentScore: number | null;
+  averagePercentScore: number | null;
+  maxPercentScore: number | null;
+};
+
+type ChartProps = {
+  score: Score;
+};
+
+export default function AvgScoreChart({ score }: ChartProps) {
+  return (
+    <ChartContainer
+      renderChart={(width) => <AvgScoreSVG data={score} width={width} />}
+    />
+  );
 }
 
-export default function AvgScoreChart(props: Props) {
+interface SVGProps extends React.SVGProps<SVGSVGElement> {
+  data: Score;
+}
+
+export function AvgScoreSVG(props: SVGProps) {
   const { width = 165, height = 30, data } = props;
   const minWidth = 40;
   const maxWidth = 100;
