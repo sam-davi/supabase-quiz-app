@@ -4,9 +4,9 @@ import { LogOut } from "lucide-react";
 
 export default function SignOutForm() {
   return (
-    <form action={signOutAction}>
+    <form className="w-full" action={signOutAction}>
       <button
-        className="flex items-center transition-colors focus:bg-accent focus:text-accent-foreground"
+        className="flex w-full items-center justify-start transition-colors focus:bg-accent focus:text-accent-foreground"
         type="submit"
       >
         <LogOut className="mr-2 h-4 w-4" />

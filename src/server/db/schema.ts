@@ -335,6 +335,10 @@ export const roundsRelations = relations(rounds, ({ one }) => ({
     fields: [rounds.category, rounds.team],
     references: [categories.slug, categories.team],
   }),
+  score: one(scores, {
+    fields: [rounds.team, rounds.quizDate, rounds.location],
+    references: [scores.team, scores.quizDate, scores.location],
+  }),
 }));
 
 export const scores = pgTable(
@@ -391,7 +395,7 @@ export const scores = pgTable(
   ],
 );
 
-export const scoresRelations = relations(scores, ({ one }) => ({
+export const scoresRelations = relations(scores, ({ one, many }) => ({
   team: one(teams, {
     fields: [scores.team],
     references: [teams.slug],
@@ -400,4 +404,5 @@ export const scoresRelations = relations(scores, ({ one }) => ({
     fields: [scores.location, scores.team],
     references: [locations.slug, locations.team],
   }),
+  rounds: many(rounds),
 }));

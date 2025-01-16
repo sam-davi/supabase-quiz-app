@@ -1,4 +1,4 @@
-import AvgScoreChart from "@/components/d3/avgScoreChart";
+import AvgScoreChart from "@/components/d3/AvgScoreChart";
 import { SubmitButton } from "@/components/submit-button";
 import { Button } from "@/components/ui/button";
 import {

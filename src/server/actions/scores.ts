@@ -4,6 +4,60 @@ import { encodedRedirect } from "@/utils/utils";
 import { createDrizzleSupabaseClient } from "../db";
 import { getTeamRoleAction } from "./teams";
 
+export const getLastQuizScoresAction = async (team: string) => {
+  const db = await createDrizzleSupabaseClient();
+
+  const role = await getTeamRoleAction(team);
+
+  if (role == null || !["host", "member"].includes(role)) {
+    return encodedRedirect(
+      "error",
+      "/quiz",
+      "You do not have permission to view results for this team",
+    );
+  }
+
+  const result = await db.rls(async (tx) => {
+    return await tx.query.scores.findFirst({
+      columns: {
+        id: true,
+        score: true,
+        outOf: true,
+        percentScore: true,
+        roundsPlayed: true,
+        quizDate: true,
+      },
+      with: {
+        location: {
+          columns: { name: true, slug: true },
+        },
+        rounds: {
+          columns: {
+            roundNumber: true,
+            score: true,
+            outOf: true,
+            double: true,
+            totalScore: true,
+            totalOutOf: true,
+            percentScore: true,
+          },
+          with: {
+            category: {
+              columns: { name: true, slug: true },
+            },
+          },
+          orderBy: (row, { asc }) => asc(row.roundNumber),
+          limit: 100,
+        },
+      },
+      where: (row, { eq }) => eq(row.team, team),
+      orderBy: (row, { desc }) => [desc(row.quizDate), desc(row.location)],
+    });
+  });
+
+  return result;
+};
+
 export const nextScorePageAction = async (
   team: string,
   cursor?: { location: string; date: string },
