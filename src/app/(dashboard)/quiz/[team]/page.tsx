@@ -1,4 +1,6 @@
+import BottomFiveCategories from "@/components/d3/BottomFiveCategories";
 import LastQuiz from "@/components/d3/LastQuizComponent";
+import TopFiveCategories from "@/components/d3/TopFiveCategories";
 import { getProfileAction } from "@/server/actions/profiles";
 import { getTeamsAction } from "@/server/actions/teams";
 import { redirect } from "next/navigation";
@@ -31,8 +33,8 @@ export default async function Dashboard({
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
       <div className="grid auto-rows-min gap-4 md:grid-cols-3">
         <LastQuiz team={team} />
-        <div className="rounded-xl bg-muted/50" />
-        <div className="rounded-xl bg-muted/50" />
+        <TopFiveCategories team={team} />
+        <BottomFiveCategories team={team} />
       </div>
       <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
     </div>
