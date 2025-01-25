@@ -2,64 +2,61 @@ import { getLastQuizScoresAction } from "@/server/actions/scores";
 import * as d3 from "d3";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function LastQuizChart({ team }: { team: string }) {
+type DataPoint = NonNullable<
+  Awaited<ReturnType<typeof getLastQuizScoresAction>>
+>["rounds"][number];
+
+export default async function LastQuizChart({ team }: { team: string }) {
+  const data = await getLastQuizScoresAction(team);
+
+  if (!data) return null;
+
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-xl">Last Quiz</CardTitle>
+        <CardTitle className="flex justify-between">
+          <span>{data.location.name}</span>
+          <span>{data.quizDate}</span>
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <LastQuizChartInner team={team} />
+      <CardContent className="flex flex-col items-center gap-4">
+        <LastQuizChartInner rounds={data.rounds} />
       </CardContent>
     </Card>
   );
 }
 
-async function LastQuizChartInner({ team }: { team: string }) {
-  const data = await getLastQuizScoresAction(team);
-
-  if (!data) return null;
-
-  const { rounds } = data;
+async function LastQuizChartInner({ rounds }: { rounds: DataPoint[] }) {
   if (rounds.length === 0) return null;
 
-  const width = 960;
+  const width = 480;
   const height = width / 2;
   const margin = { top: 10, right: 20, bottom: 30, left: 40 };
 
-  const roundsNumbers = rounds.map((round) => round.roundNumber);
+  const roundsNumbers = rounds.map((round) => round.roundNumber.toString());
 
   const xScale = d3
-    .scaleLinear()
-    .domain([Math.min(...roundsNumbers), Math.max(...roundsNumbers)])
+    .scaleBand()
+    .domain(roundsNumbers)
     .range([0, width - margin.left - margin.right]);
+
   const yScale = d3
     .scaleLinear()
     .domain([0, 100])
     .range([height - margin.bottom - margin.top, 0]);
 
-  type DataPoint = (typeof rounds)[number];
-
-  const line = d3
-    .line<DataPoint>()
-    .x((d) => xScale(d.roundNumber) ?? 0)
-    .y((d) => yScale(d.percentScore ?? 0));
-
-  const d = line(rounds);
-  if (!d) return null;
+  const colorScale = d3.scaleSequential(d3.interpolateCool).domain([0, 100]);
 
   return (
-    <div className="aspect-2/1">
+    <div className="aspect-2/1 w-full">
       <svg className="h-full w-full overflow-visible">
         {/* X axis */}
-        {rounds.map((round, i) => (
+        {rounds.map((round) => (
           <g key={round.roundNumber} className="text-xs">
             <text
-              x={`${((xScale(round.roundNumber) + margin.left) / width) * 100}%`}
+              x={`${(((xScale(round.roundNumber.toString()) ?? 0) + margin.left + xScale.bandwidth() / 2) / width) * 100}%`}
               y={"100%"}
-              textAnchor={
-                i === 0 ? "start" : i === rounds.length - 1 ? "end" : "middle"
-              }
+              textAnchor="middle"
               alignmentBaseline="middle"
               fill="currentColor"
             >
@@ -106,14 +103,25 @@ async function LastQuizChartInner({ team }: { team: string }) {
                 </g>
               ))}
 
-            {/* Line */}
-            <path
-              d={d}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.5}
-              vectorEffect="non-scaling-stroke"
-            />
+            {/* Bars */}
+            {rounds.map((round) => (
+              <rect
+                key={round.roundNumber}
+                x={
+                  (xScale(round.roundNumber.toString()) ?? 0) +
+                  xScale.bandwidth() / 4
+                }
+                y={yScale(round.percentScore ?? 0)}
+                width={xScale.bandwidth() / 2}
+                height={
+                  height -
+                  margin.bottom -
+                  margin.top -
+                  yScale(round.percentScore ?? 0)
+                }
+                fill={colorScale(round.percentScore ?? 0)}
+              />
+            ))}
           </g>
         </svg>
       </svg>
