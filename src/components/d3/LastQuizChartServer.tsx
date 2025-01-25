@@ -24,7 +24,7 @@ async function LastQuizChartInner({ team }: { team: string }) {
   if (rounds.length === 0) return null;
 
   const width = 960;
-  const height = (width * 9) / 16;
+  const height = width / 2;
   const margin = { top: 10, right: 20, bottom: 30, left: 40 };
 
   const roundsNumbers = rounds.map((round) => round.roundNumber);
@@ -49,7 +49,7 @@ async function LastQuizChartInner({ team }: { team: string }) {
   if (!d) return null;
 
   return (
-    <div className="aspect-video">
+    <div className="aspect-2/1">
       <svg className="h-full w-full overflow-visible">
         {/* X axis */}
         {rounds.map((round, i) => (
