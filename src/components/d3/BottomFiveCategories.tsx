@@ -1,7 +1,7 @@
 import { prevCategoryPageAction } from "@/server/actions/categories";
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import AvgScoreChart from "./AvgScoreChart";
+import AvgScoreChart from "./AvgScoreChartServer";
 import {
   Table,
   TableRow,
