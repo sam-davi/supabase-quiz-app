@@ -23,10 +23,14 @@ import {
   prevCategoryPageAction,
 } from "@/server/actions/categories";
 import {
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronsDown,
   ChevronsLeft,
   ChevronsRight,
+  ChevronsUp,
+  ChevronUp,
   RefreshCw,
 } from "lucide-react";
 import React from "react";
@@ -122,8 +126,14 @@ export default async function RoundStats({
                   <TableCell className="hidden text-center lg:table-cell">
                     {score.minPercentScore?.toFixed(0)}%
                   </TableCell>
-                  <TableCell className="hidden text-center lg:table-cell">
-                    {score.averagePercentScore?.toFixed(0)}%
+                  <TableCell className="hidden justify-items-center lg:table-cell">
+                    <span className="flex items-center gap-1">
+                      {score.averagePercentScore?.toFixed(0)}%{" "}
+                      <ScoreDelta
+                        averagePercentScore={score.averagePercentScore}
+                        percentScore={score.rounds[0]?.percentScore}
+                      />
+                    </span>
                   </TableCell>
                   <TableCell className="hidden text-center lg:table-cell">
                     {score.maxPercentScore?.toFixed(0)}%
@@ -238,3 +248,23 @@ export default async function RoundStats({
     </div>
   );
 }
+
+const ScoreDelta = ({
+  averagePercentScore,
+  percentScore,
+}: {
+  averagePercentScore: number | null | undefined;
+  percentScore: number | null | undefined;
+}) => {
+  if (!averagePercentScore) return null;
+  if (!percentScore) return null;
+
+  const delta = percentScore - averagePercentScore;
+
+  if (delta > 10) return <ChevronsUp className="h-4 w-4 text-green-500" />;
+  if (delta > 0) return <ChevronUp className="h-4 w-4 text-green-800" />;
+  if (delta < -10) return <ChevronsDown className="h-4 w-4 text-red-500" />;
+  if (delta < 0) return <ChevronDown className="h-4 w-4 text-red-800" />;
+
+  return null;
+};
