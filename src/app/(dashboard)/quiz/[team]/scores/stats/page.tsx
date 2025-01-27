@@ -1,4 +1,4 @@
-import AvgScoreChart from "@/components/d3/AvgScoreChartServer";
+import ViolinChart from "@/components/d3/ViolinChart";
 import { SubmitButton } from "@/components/submit-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -121,7 +121,7 @@ export default async function RoundStats({
                 <TableRow key={score.slug}>
                   <TableCell>{score.name}</TableCell>
                   <TableCell className="max-w-[165px] items-center justify-items-center">
-                    <AvgScoreChart score={score} />
+                    <ViolinChart score={score} />
                   </TableCell>
                   <TableCell className="hidden text-center lg:table-cell">
                     {score.minPercentScore?.toFixed(0)}%

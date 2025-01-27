@@ -1,7 +1,6 @@
 import { prevCategoryPageAction } from "@/server/actions/categories";
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import AvgScoreChart from "./AvgScoreChartServer";
 import {
   Table,
   TableRow,
@@ -10,6 +9,7 @@ import {
   TableHeader,
   TableHead,
 } from "@/components/ui/table";
+import ViolinChart from "./ViolinChart";
 
 export default async function BottomFiveCategories({ team }: { team: string }) {
   const categories = await prevCategoryPageAction(team, undefined, 2, 5);
@@ -33,7 +33,7 @@ export default async function BottomFiveCategories({ team }: { team: string }) {
               <TableRow key={category.id}>
                 <TableCell className="w-[100px]">{category.name}</TableCell>
                 <TableCell className="w-[100px] text-end">
-                  <AvgScoreChart key={category.id} score={category} />
+                  <ViolinChart key={category.id} score={category} />
                 </TableCell>
               </TableRow>
             ))}
