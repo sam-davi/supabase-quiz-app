@@ -65,7 +65,7 @@ function LastQuizChartInner({ rounds }: { rounds: DataPoint[] }) {
           <g key={round.roundNumber} className="text-xs">
             <text
               x={`${(((xScale(round.roundNumber.toString()) ?? 0) + margin.left + xScale.bandwidth() / 2) / width) * 100}%`}
-              y={`${((height - margin.bottom / 4) / height) * 100}%`}
+              y={`${((height - margin.bottom / 2) / height) * 100}%`}
               textAnchor="middle"
               alignmentBaseline="middle"
               fill="currentColor"
@@ -112,43 +112,61 @@ function LastQuizChartInner({ rounds }: { rounds: DataPoint[] }) {
                   />
                 </g>
               ))}
-
-            {/* Bars */}
-            {rounds.map((round) => (
-              <rect
-                key={round.roundNumber}
-                x={
-                  (xScale(round.roundNumber.toString()) ?? 0) +
-                  xScale.bandwidth() / 4
-                }
-                y={yScale(round.percentScore ?? 0)}
-                width={xScale.bandwidth() / 2}
-                height={
-                  height -
-                  margin.bottom -
-                  margin.top -
-                  yScale(round.percentScore ?? 0)
-                }
-                fill={colorScale(round.percentScore ?? 0)}
-              />
-            ))}
-
-            {/* Stars */}
-            {rounds
-              .filter((round) => round.double)
-              .map((round) => (
-                <path
-                  key={round.roundNumber}
-                  d={star}
-                  fill={"gold"}
-                  transform={`translate(${
-                    (xScale(round.roundNumber.toString()) ?? 0) +
-                    xScale.bandwidth() / 4.5
-                  }, ${yScale(round.percentScore ?? 0) - 21})`}
-                />
-              ))}
           </g>
         </svg>
+
+        {/* Data Points */}
+        {rounds.map((round) => (
+          <g key={round.roundNumber} className="group">
+            <svg viewBox={`0 0 ${width} ${height}`} overflow="visible">
+              <g transform={`translate(${margin.left}, ${margin.top})`}>
+                <g
+                  transform={`translate(${
+                    (xScale(round.roundNumber.toString()) ?? 0) +
+                    xScale.bandwidth() / 4
+                  }, ${yScale(round.percentScore ?? 0)})`}
+                >
+                  {/* Bar */}
+                  <rect
+                    id={`bar-${round.roundNumber}`}
+                    className="group-hover:fill-violet-600"
+                    width={xScale.bandwidth() / 2}
+                    height={
+                      height -
+                      margin.bottom -
+                      margin.top -
+                      yScale(round.percentScore ?? 0)
+                    }
+                    fill={colorScale(round.percentScore ?? 0)}
+                  />
+
+                  {/* Star */}
+                  {round.double && (
+                    <path
+                      className="group-hover:fill-violet-600"
+                      d={star}
+                      fill={"gold"}
+                      transform={`translate(-1, -21)`}
+                    />
+                  )}
+                </g>
+              </g>
+            </svg>
+
+            <g className={`hidden group-hover:block`}>
+              <text
+                x={`${(((xScale(round.roundNumber.toString()) ?? 0) + margin.left + xScale.bandwidth() / 2) / width) * 100}%`}
+                y={"100%"}
+                textAnchor="middle"
+                alignmentBaseline="hanging"
+                fill="currentColor"
+                fontSize={"0.75rem"}
+              >
+                {round.category.name}
+              </text>
+            </g>
+          </g>
+        ))}
       </svg>
     </div>
   );
