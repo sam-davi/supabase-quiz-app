@@ -54,7 +54,7 @@ export default async function Scores({
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-      <Card>
+      <Card className="h-full">
         <CardHeader>
           <CardTitle>Scores</CardTitle>
         </CardHeader>

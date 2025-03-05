@@ -130,7 +130,7 @@ export default function CategoriesTable({ team }: { team: string }) {
   }, [inView, lastPageSize, pages, cursor, team]);
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
