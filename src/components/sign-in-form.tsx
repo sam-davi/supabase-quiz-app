@@ -13,23 +13,23 @@ export function SignInForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <AuthForm
         title="Welcome back"
-        description="Sign in with your Apple or Google account"
+        description="Sign in with your Github or Google account"
         message={message}
         footer={
           <div className="flex flex-col gap-1">
-            <div className="text-center text-sm">
+            {/* <div className="text-center text-sm">
               Forgotten password?{" "}
               <Link
-                className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
+                className="text-primary hover:text-primary/80 font-medium underline underline-offset-4"
                 href="#"
               >
                 Reset password
               </Link>
-            </div>
+            </div> */}
             <div className="text-center text-sm">
               Don&apos;t have an account?{" "}
               <Link
-                className="font-medium text-primary underline underline-offset-4 hover:text-primary/80"
+                className="text-primary hover:text-primary/80 font-medium underline underline-offset-4"
                 href="/sign-up"
               >
                 Sign up

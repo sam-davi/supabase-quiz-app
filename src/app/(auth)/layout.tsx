@@ -1,15 +1,21 @@
-import { Star } from "lucide-react";
+import { MessageCircleQuestion } from "lucide-react";
+import Link from "next/link";
 
 export default function LoginPage({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
+    <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
-        <a href="#" className="flex items-center gap-2 self-center font-medium">
-          <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <Star className="size-4" />
+        <Link
+          href="/"
+          className="flex items-center gap-2 self-center font-medium"
+        >
+          <div className="flex shrink-0 items-center gap-2">
+            <MessageCircleQuestion className="text-foreground h-8 w-auto" />
+            <span className="text-foreground text-3xl">
+              <span className="font-extrabold">Quiz</span>Track
+            </span>
           </div>
-          Quiz Track
-        </a>
+        </Link>
         {children}
       </div>
     </div>
