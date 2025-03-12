@@ -97,8 +97,11 @@ const getCursor = (categories: Category[]) => {
 };
 
 export default function CategoriesTable({ team }: { team: string }) {
-  const PAGE_SIZE = 10;
-  const [roundsPlayed, setRoundsPlayed] = useState<number>(2);
+  const PAGE_SIZE = 20;
+  const DEFAULT_ROUNDS_PLAYED = 2;
+  const [roundsPlayed, setRoundsPlayed] = useState<number>(
+    DEFAULT_ROUNDS_PLAYED,
+  );
   const [lastPageSize, setLastPageSize] = useState<number>(PAGE_SIZE);
   const [pages, setPages] = useState<number>(0);
   const [categoryData, setCategoryData] = useState<Category[]>([]);
